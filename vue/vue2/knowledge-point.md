@@ -105,7 +105,6 @@
 1. v-if 是“真正”的条件渲染，因为它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。
 2. v-if 也是惰性的：如果在初始渲染时条件为假，则什么也不做——直到条件第一次变为真时，才会开始渲染条件块。
 3. v-show 元素总是会被渲染，并且只是简单地基于 CSS 进行切换。
-4. 
 > 一般来说，v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件很少改变，则使用 v-if 较好。
 
 # [避免 v-if 和 v-for 用在一起](https://v2.cn.vuejs.org/v2/style-guide/#%E9%81%BF%E5%85%8D-v-if-%E5%92%8C-v-for-%E7%94%A8%E5%9C%A8%E4%B8%80%E8%B5%B7%E5%BF%85%E8%A6%81)
@@ -136,22 +135,41 @@
 > 当 Vue 正在更新使用 v-for 渲染的元素列表时，它默认使用“就地更新”的策略。如果数据项的顺序被改变，Vue 将不会移动 DOM 元素来匹配数据项的顺序，而是就地更新每个元素，并且确保它们在每个索引位置正确渲染。这个默认的模式是高效的，但是只适用于不依赖子组件状态或临时 DOM 状态 (例如：表单输入值) 的列表渲染输出。为了给 Vue 一个提示，以便它能跟踪每个节点的身份，从而重用和重新排序现有元素，你需要为每项提供一个唯一 key attribute。建议尽可能在使用 v-for 时提供 key attribute，除非遍历输出的 DOM 内容非常简单，或者是刻意依赖默认行为以获取性能上的提升。
 
 # 修饰符
+- 修饰符可链式调用
+## [原生事件修饰符](https://v2.cn.vuejs.org/v2/guide/events.html#%E4%BA%8B%E4%BB%B6%E4%BF%AE%E9%A5%B0%E7%AC%A6)
 
-## [事件修饰符](https://v2.cn.vuejs.org/v2/guide/events.html#%E4%BA%8B%E4%BB%B6%E4%BF%AE%E9%A5%B0%E7%AC%A6)
+- .stop：阻止事件继续传播
+- .prevent：阻止默认事件
+- .capture：采用事件捕获机制
+- .self：只当事件源是当前元素自身时触发处理函数
+- .once：事件将只会触发一次
+- .passive：不要把 .passive 和 .prevent 一起使用，因为 .prevent 将会被忽略，同时浏览器可能会向你展示一个警告。请记住，.passive 会告诉浏览器你不想阻止事件的默认行为。减少了额外的监听，从而提高了性能。
 
-- .stop
-- .prevent
-- .capture
-- .self
-- .once
-- .passive
+## [自定义事件修饰符](https://v2.cn.vuejs.org/v2/guide/components-custom-events.html#%E5%B0%86%E5%8E%9F%E7%94%9F%E4%BA%8B%E4%BB%B6%E7%BB%91%E5%AE%9A%E5%88%B0%E7%BB%84%E4%BB%B6)
+
+- [.native](https://v2.cn.vuejs.org/v2/guide/components-custom-events.html#%E5%B0%86%E5%8E%9F%E7%94%9F%E4%BA%8B%E4%BB%B6%E7%BB%91%E5%AE%9A%E5%88%B0%E7%BB%84%E4%BB%B6)：将原生事件绑定到组件的根元素上
+  ```
+    <base-input v-on:focus.native="onFocus"></base-input>
+  ```
+- [.async](https://v2.cn.vuejs.org/v2/guide/components-custom-events.html#sync-%E4%BF%AE%E9%A5%B0%E7%AC%A6)：对一个 prop 进行“双向绑定”
+  ```
+    <text-document
+      v-bind:title="doc.title"
+      v-on:update:title="doc.title = $event"
+    ></text-document>
+    // 等价于
+    <text-document v-bind:title.sync="doc.title"></text-document>
+  ```
+  注意：
+  - 有 .sync 修饰符的 v-bind 不能和表达式一起使用 (例如 v-bind:title.sync=”doc.title + ‘!’” 是无效的)。取而代之的是，你只能提供你想要绑定的 property 名，类似 v-model。
+  - 将 v-bind.sync 用在一个字面量的对象上，例如 v-bind.sync=”{ title: doc.title }”，是无法正常工作的，因为在解析一个像这样的复杂表达式的时候，有很多边缘情况需要考虑。应该使用 v-bind.sync=”对象变量”
 
 ## [按键修饰符](https://v2.cn.vuejs.org/v2/guide/events.html#%E6%8C%89%E9%94%AE%E4%BF%AE%E9%A5%B0%E7%AC%A6)
 
 ```
   <input v-on:keyup.page-down="onPageDown">
 ```
-> 处理函数只会在 $event.key 等于 PageDown 时被调用。
+> 处理函数只会在 $event.key 等于 PageDown 时被调用。你可以直接将 KeyboardEvent.key 暴露的任意有效按键名转换为 kebab-case 来作为修饰符。keyCode 的事件用法已经被废弃了并可能不会被最新的浏览器支持。
 - .enter
 - .tab
 - .delete (捕获“删除”和“退格”键)
@@ -179,8 +197,81 @@
   - .right
   - .middle
 
+# [v-model](https://v2.cn.vuejs.org/v2/guide/forms.html)
+> 你可以用 v-model 指令在表单 `<input>`、`<textarea>` 及 `<select>` 元素上创建双向数据绑定。它会根据控件类型自动选取正确的方法来更新元素。尽管有些神奇，但 v-model 本质上不过是语法糖。它负责监听用户的输入事件以更新数据，并对一些极端场景进行一些特殊处理。
 
+> v-model 会忽略所有表单元素的 value、checked、selected attribute 的初始值而总是将 Vue 实例的数据作为数据来源。你应该通过 JavaScript 在组件的 data 选项中声明初始值。
+v-model 在内部为不同的输入元素使用不同的 property 并抛出不同的事件：
+- text 和 textarea 元素使用 value property 和 input 事件；
+- checkbox 和 radio 使用 checked property 和 change 事件；
+- select 字段将 value 作为 prop 并将 change 作为事件。
+## 基本用法
+```
+  <!-- 当选中时，`picked` 为字符串 "a" -->
+  <input type="radio" v-model="picked" value="a">
 
+  <!-- `toggle` 为 true 或 false -->
+  <input type="checkbox" v-model="toggle">
 
+  <!-- 当选中第一个选项时，`selected` 为字符串 "abc" -->
+  <select v-model="selected">
+    <option value="abc">ABC</option>
+  </select>
+```
+
+## 修饰符
+### .lazy
+> 在默认情况下，v-model 在每次 input 事件触发后将输入框的值与数据进行同步 (除了上述输入法组合文字时)。你可以添加 lazy 修饰符，从而转为在 change 事件_之后_进行同步：
+```
+  <!-- 在“change”时而非“input”时更新 -->
+  <input v-model.lazy="msg">
+```
+### .number
+> 如果想自动将用户的输入值转为数值类型，可以给 v-model 添加 number 修饰符：
+```
+  <input v-model.number="age" type="number">
+```
+### .trim
+> 如果要自动过滤用户输入的首尾空白字符，可以给 v-model 添加 trim 修饰符：
+```
+  <input v-model.trim="msg" />
+```
+
+## [自定义组件的 v-model](https://v2.cn.vuejs.org/v2/guide/components-custom-events.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6%E7%9A%84-v-model)
+> 一个组件上的 v-model 默认会利用名为 value 的 prop 和名为 input 的事件，但是像单选框、复选框等类型的输入控件可能会将 value attribute 用于不同的目的。model 选项可以用来避免这样的冲突：
+```
+  Vue.component('base-checkbox', {
+    model: {
+      prop: 'checked',
+      event: 'change'
+    },
+    props: {
+      checked: Boolean
+    },
+    template: `
+      <input
+        type="checkbox"
+        v-bind:checked="checked"
+        v-on:change="$emit('change', $event.target.checked)"
+      >
+    `
+  })
+  <base-checkbox v-model="lovingVue"></base-checkbox>
+```
+> 这里的 lovingVue 的值将会传入这个名为 checked 的 prop。同时当 `<base-checkbox>` 触发一个 change 事件并附带一个新的值的时候，这个 lovingVue 的 property 将会被更
+
+> 注意你仍然需要在组件的 props 选项里声明 checked 这个 prop。
 
 # inheritAttrs
+
+# component动态组件
+
+# [slot（插槽）](https://v2.cn.vuejs.org/v2/guide/components-slots.html)
+
+## 默认插槽
+
+## 具名插槽
+
+## 作用域插槽
+
+## 动态插槽
