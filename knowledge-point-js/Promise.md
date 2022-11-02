@@ -31,7 +31,7 @@
 2. Promise对象是可以链式调用的，由于每次调用 .then 或者 .catch 都会返回一个新的 promise，从而实现了链式调用。
 3. then 或 catch 返回的值不能是 promise 本身，否则会造成死循环。
 #### then
-1. 接受的参数如果并非是一个函数，它实际上会将其解释为then(null)，这就会导致前一个Promise的结果会传递下面。
+1. 接受的参数如果并非是一个函数，它实际上会将其解释为then(null)，这就会导致前一个Promise的结果会传递下面。并不会额外生成异步任务。
 2. 可以通过传入第二个形参为一个回调函数来捕获 Promise 中的错误。 
 3. 返回任意一个非 promise 的值，那么会将返回值包裹成一个 promise 对象，会被下一个then捕获。
    ```
@@ -76,6 +76,14 @@
             console.log(value)
         })
     // 1 3 4 5 2
+    /*
+      then回调如果返回一个promise的话，会单独创建一个微任务去异步执行返回的promise的then操作。
+      microtask(() => {
+        resolution.then((value) => {
+          ReslovePromise(promise, value) 
+        })
+      })
+    */
    ```
    [解析](https://juejin.cn/post/7055202073511460895#heading-25)
 
