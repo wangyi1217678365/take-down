@@ -74,5 +74,8 @@
   git fetch // 将某个远程仓库的更新全部取回本地，不会进行代码合并，如果远程有删除的分支本地关联分支不会同步删除
   git remote update origin --prune // 将某个远程仓库的更新全部取回本地，不会进行代码合并，如果远程有删除的分支本地关联分支会同步删除
 ```
-
-
+## 是否忽略文件大小写的变化
+```
+  git config core.ignorecase true // 忽略
+  git config core.ignorecase false // 不忽略
+```
