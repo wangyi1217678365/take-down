@@ -41,6 +41,7 @@
   git stash list // 查看缓存记录
   git stash pop // 取出最近一次缓存，添加至工作区
   git stash apply 缓存序列号 // 取出指定编号的缓存，添加至工作区
+  git stash drop 缓存序列号 // 删除指定缓存
 ```
 > 应用场景：本地开发中，需要缓存工作区，可以通过git stash缓存。1. 需要切换出当前分支。2. 需要将工作区的内容合并至其它分支。
 ## [回退版本（git reset、git revert）](https://juejin.cn/post/6844903614767448072)
