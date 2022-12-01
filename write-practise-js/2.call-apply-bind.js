@@ -25,7 +25,7 @@ function myBind (context, ...args) {
       this[fn] = self 
       const result = this[fn](...allArgs) // 通过隐式绑定，改变函数内部的 this
       fun.prototype = Object.create(self.prototype) // 继承原型对象
-      return (result && typeof (result === 'object' || typeof result === 'function')) || this
+      return (result && typeof (result === 'object' || typeof result === 'function')) ? result : this
     } else {
       _this[fn](...allArgs)
     }
