@@ -1,6 +1,6 @@
 # Promise
 > 用于表示一个异步操作的最终完成（或失败）及其结果值。当 promise 被调用后，它会以处理中状态 (pending) 开始。这意味着调用的函数会继续执行，而 promise 仍处于处理中直到解决为止，从而为调用的函数提供所请求的任何数据。被创建的 promise 最终会以被解决状态 (fulfilled) 或 被拒绝状态(rejected) 结束，并在完成时调用相应的回调函数（传给 then 和 catch）。
-## 用法
+## 语法
 ```
   new Promise((resolve, reject) => {
     resolve(2)
