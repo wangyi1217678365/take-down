@@ -25,6 +25,14 @@
   git branch -d -r <branchname> //删除远程分支，删除后还需推送到服务器
   git branch -m <oldbranch> <newbranch> //重命名本地分支
 ```
+## 克隆仓库
+```
+  git clone 仓库地址 // 克隆最新分支或者标签
+  git clone -b 指定分支名或标签 仓库地址
+  git clone -b 指定分支名或标签 仓库地址 项目名称
+
+```
+
 ## 本地项目关联远程仓库
 ```
   git remote add origin xxx
