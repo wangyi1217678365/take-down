@@ -38,9 +38,21 @@
   git remote add origin xxx
 ```
 > 应用场景：没有创建远程仓库，在本地创建了一个本地仓库开发，需要关联本地项目至远程仓库
-## 打标签（git tag）
+## 标签（git tag）针对某次 commit 的一个标识
 ```
-
+  git tag // 列出所有标签
+  git tag -l [xxx*] // 根据 xxx 进行标签的筛选列表
+  git show 标签名 //  查看标签的提交信息
+  git log --oneline --graph
+  git tag 标签名 // 创建轻量标签
+  git tag 标签名 提交版本号 // 给指定的commit版本创建一个轻量标签
+  git tag -a 标签名 -m 附注信息 // 创建附注标签
+  git tag 标签名 提交版本号 -m 附注信息 // 给指定的commit版本创建一个附注标签
+  git tag -d 标签名称 // 删除指定名称的标签
+  git push origin 标签名称 // 将指定的标签推送到远程仓库
+  git push origin --tags // 将所有不在远程仓库中的标签上传到远程仓库
+  git push origin  :regs/tags/标签名称 // 删除远程仓库中的 指定标签
+  git push origin --delete 标签名称 // 删除远程仓库中的 指定标签
 ```
 ## 缓存没有提交的内容并移出开发环境（git stash）
 ```
@@ -71,6 +83,7 @@
 ```
   git push origin 远程分支名 // 创建远程分支 
   git push // 推送到远程关联分支
+  git push -f // 强制推送 常用于由于版本回退导致的版本落后 正常的git pull 提交不上去需要强制推送
 ```
 ## 代码合并（git merge、git cherry-pick）
 ```
@@ -79,8 +92,8 @@
 ```
 ## 分支更新（git pull、git fetch、git remote update origin --prune）
 ```
-  git pull // 将本地的分支版本上传到远程并合
-  git fetch // 将某个远程仓库的更新全部取回本地，不会进行代码合并，如果远程有删除的分支本地关联分支不会同步删除
+  git pull // 将本地的分支版本上传到远程
+  git fetch // 将某个远程仓库的更新全部取回本地，不会进行代码合并，如果远程有删除的分支本地关联分支不会同步删除 主要用来同步新增的远程分支
   git remote update origin --prune // 将某个远程仓库的更新全部取回本地，不会进行代码合并，如果远程有删除的分支本地关联分支会同步删除
 ```
 ## 是否忽略文件大小写的变化
