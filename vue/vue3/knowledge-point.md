@@ -1,71 +1,84 @@
-# 选项式 API vs 组合式 API
-
-## 选项式 API（Options API）
-> 使用选项式 API，我们可以用包含多个选项的对象来描述组件的逻辑，例如 data、methods 和 mounted。选项所定义的属性都会暴露在函数内部的 this 上，它会指向当前的组件实例。
+# [vue3](https://cn.vuejs.org/api/composition-api-lifecycle.html#onmounted)
+![vue3生命周期](https://cdn.jsdelivr.net/gh/wangyi1217678365/yi-image-host/lifecycle.16e4c08e.png)
+1. **[onBeforeMount](https://cn.vuejs.org/api/composition-api-lifecycle.html#onbeforemount)**：注册一个回调函数，在组件被挂载之前被调用。
+   - 当这个钩子被调用时，组件已经完成了其响应式状态的设置，但还没有创建 DOM 节点。它即将首次执行 DOM 渲染过程。
+   - 这个钩子在服务器端渲染期间不会被调用。
+2. **[onMounted](https://cn.vuejs.org/api/composition-api-lifecycle.html#onmounted)**：注册一个回调函数，在组件挂载完成后执行。
+   - 这个钩子通常用于执行需要访问组件所渲染的 DOM 树相关的副作用，或是在服务端渲染应用中用于确保 DOM 相关代码仅在客户端执行。
+   - 组件在以下情况下被视为已挂载：
+     - 其所有同步子组件都已经被挂载 (不包含异步组件或 \<Suspense> 树内的组件)。
+     - 其自身的 DOM 树已经创建完成并插入了父容器中。注意仅当根容器在文档中时，才可以保证组件 DOM 树也在文档中。
+   - 这个钩子在服务器端渲染期间不会被调用。
+3. **[onBeforeUpdate](https://cn.vuejs.org/api/composition-api-lifecycle.html#onbeforeupdate)**：注册一个回调函数，在组件即将因为响应式状态变更而更新其 DOM 树之前调用。
+   - 这个钩子可以用来在 Vue 更新 DOM 之前访问 DOM 状态。在这个钩子中更改状态也是安全的。
+   - 这个钩子在服务器端渲染期间不会被调用。
+4. **[onUpdated](https://cn.vuejs.org/api/composition-api-lifecycle.html#onupdated)**：注册一个回调函数，在组件因为响应式状态变更而更新其 DOM 树之后调用。
+   - 父组件的更新钩子将在其子组件的更新钩子之后调用。钩子会在组件的任意 DOM 更新后被调用，这些更新可能是由不同的状态变更导致的。
+   - 如果你需要在某个特定的状态更改后访问更新后的 DOM，请使用 nextTick() 作为替代。
+   - 这个钩子在服务器端渲染期间不会被调用。
+5. **[onBeforeUnmount](https://cn.vuejs.org/api/composition-api-lifecycle.html#onbeforeunmount)**：注册一个回调函数，在组件实例被卸载之前调用。
+   - 当这个钩子被调用时，组件实例依然还保有全部的功能。
+   - 这个钩子在服务器端渲染期间不会被调用。
+6. **[onUnmounted](https://cn.vuejs.org/api/composition-api-lifecycle.html#onunmounted)**：注册一个回调函数，在组件实例被卸载之后调用。
+   - 一个组件在以下情况下被视为已卸载：
+     - 其所有子组件都已经被卸载。
+     - 所有相关的响应式作用 (渲染作用以及 setup() 时创建的计算属性和侦听器) 都已经停止。
+   - 可以在这个钩子中手动清理一些副作用，例如计时器、DOM 事件监听器或者与服务器的连接。
+   - 这个钩子在服务器端渲染期间不会被调用。
+7. **[onErrorCaptured](https://cn.vuejs.org/api/composition-api-lifecycle.html#onunmounted)**：注册一个回调函数，在捕获了后代组件传递的错误时调用。
+---
+# [声明响应式状态](https://cn.vuejs.org/guide/essentials/reactivity-fundamentals.html#declaring-reactive-state)
+## reactive
 ```
-  <script>
+  import { reactive } from 'vue'
   export default {
-    // data() 返回的属性将会成为响应式的状态
-    // 并且暴露在 `this` 上
-    data() {
+    // `setup` 是一个专门用于组合式 API 的特殊钩子函数
+    setup() {
+      const state = reactive({ count: 0 })
+
+      // 暴露 state 到模板
       return {
-        count: 0
+        state
       }
-    },
-
-    // methods 是一些用来更改状态与触发更新的函数
-    // 它们可以在模板中作为事件监听器绑定
-    methods: {
-      increment() {
-        this.count++
-      }
-    },
-
-    // 生命周期钩子会在组件生命周期的各个不同阶段被调用
-    // 例如这个函数就会在组件挂载完成后被调用
-    mounted() {
-      console.log(`The initial count is ${this.count}.`)
     }
   }
-  </script>
-
-  <template>
-    <button @click="increment">Count is: {{ count }}</button>
-  </template>
 ```
-## [组合式 API（Composition API）](https://cn.vuejs.org/guide/extras/composition-api-faq.html)
-> 通过组合式 API，我们可以使用导入的 API 函数来描述组件逻辑。在单文件组件中，组合式 API 通常会与 \<script setup> 搭配使用。这个 setup attribute 是一个标识，告诉 Vue 需要在编译时进行一些处理，让我们可以更简洁地使用组合式 API。比如，\<script setup> 中的导入和顶层变量/函数都能够在模板中直接使用。
-下面是使用了组合式 API 与 \<script setup> 改造后和上面的模板完全一样的组件：
 ```
-  <script setup>
-  import { ref, onMounted } from 'vue'
-
-  // 响应式状态
+  <div>{{ state.count }}</div>  
+```
+**[为响应式对象标注类型](https://cn.vuejs.org/guide/typescript/composition-api.html#typing-reactive)**
+## 深层响应性
+> 在 Vue 中，状态都是默认深层响应式的。这意味着即使在更改深层次的对象或数组，你的改动也能被检测到。你也可以直接创建一个[浅层响应式对象](https://cn.vuejs.org/api/reactivity-advanced.html#shallowreactive)。它们仅在顶层具有响应性，一般仅在某些特殊场景中需要。
+## 响应式代理 vs 原始对象
+1. reactive() 返回的是一个原始对象的 Proxy，它和原始对象是不相等的
+2. 只有代理对象是响应式的，更改原始对象不会触发更新。
+3. 为保证访问代理的一致性，对同一个原始对象调用 reactive() 会总是返回同样的代理对象，而对一个已存在的代理对象调用 reactive() 会返回其本身
+## reactive的局限性
+1. 仅对对象类型有效（对象、数组和 Map、Set 这样的集合类型），而对 string、number 和 boolean 这样的 原始类型 无效。
+2. 因为 Vue 的响应式系统是通过属性访问进行追踪的，因此我们必须始终保持对该响应式对象的相同引用。这意味着我们不可以随意地“替换”一个响应式对象，因为这将导致对初始引用的响应性连接丢失。同时这也意味着当我们将响应式对象的属性赋值或解构至本地变量时，或是将该属性传入一个函数时，我们会失去响应性
+## ref
+> reactive() 的种种限制归根结底是因为 JavaScript 没有可以作用于所有值类型的 “引用” 机制。为此，Vue 提供了一个 ref() 方法来允许我们创建可以使用任何值类型的响应式 ref。ref() 将传入参数的值包装为一个带 .value 属性的 ref 对象
+```
   const count = ref(0)
-
-  // 用来修改状态、触发更新的函数
-  function increment() {
-    count.value++
-  }
-
-  // 生命周期钩子
-  onMounted(() => {
-    console.log(`The initial count is ${count.value}.`)
-  })
-  </script>
-
-  <template>
-    <button @click="increment">Count is: {{ count }}</button>
-  </template>
+  console.log(count) // { value: 0 }
+  console.log(count.value) // 0
+  count.value++
+  console.log(count.value) // 1
 ```
-## 为什么要有组合式 API
-- **更好的逻辑复用**：组合式 API 最基本的优势是它使我们能够通过组合函数来实现更加简洁高效的逻辑复用。在选项式 API 中我们主要的逻辑复用机制是 mixins，而组合式 API 解决了 [**mixins 的所有缺陷**](https://cn.vuejs.org/guide/reusability/composables.html#comparisons-with-other-techniques)。
-  - 不清晰的数据来源：当使用了多个 mixin 时，实例上的数据属性来自哪个 mixin 变得不清晰，这使追溯实现和理解组件行为变得困难。**推荐在组合式函数中使用 ref + 解构模式的理由：让属性的来源在消费组件时一目了然。**
-  - 命名空间冲突：多个来自不同作者的 mixin 可能会注册相同的属性名，造成命名冲突。**推荐组合式函数，你可以通过在解构变量时对变量进行重命名来避免相同的键名。**
-  - 隐式的跨 mixin 交流：多个 mixin 需要依赖共享的属性名来进行相互作用，这使得它们隐性地耦合在一起。**推荐使用组合式函数，返回值可以作为另一个组合式函数的参数被传入，像普通函数那样。**
-- **组合式函数 vs 无渲染组件**：组合式函数不会产生额外的组件实例开销。当在整个应用中使用时，由无渲染组件产生的额外组件实例会带来无法忽视的性能开销。
-  - [无渲染组件](https://cn.vuejs.org/guide/components/slots.html#scoped-slots)：一些组件可能只包括了逻辑而不需要自己渲染内容，视图输出通过作用域插槽全权交给了消费者组件。我们将这种类型的组件称为无渲染组件。
-  - [组合式函数](https://cn.vuejs.org/guide/reusability/composables.html)：是一个利用 Vue 的组合式 API 来封装和复用有状态逻辑的函数。将业务逻辑以一个组合式函数的形式提取到外部文件中，并返回需要暴露的状态。
-- **更灵活的代码组织**：组合式 API可以很好的将逻辑关注点相关的代码被归为了一组，无需像选项式 API那样为了一个逻辑关注点在不同的选项块间来回滚动切换。还可以利用组合式函数将这一组代码移动到一个外部文件中，不再需要为了抽象而重新组织代码，大大降低了重构成本，这在长期维护的大型项目中非常关键。
-- **更好的类型推导**：组合式 API 主要利用基本的变量和函数，它们本身就是类型友好的。用组合式 API 重写的代码可以享受到完整的类型推导，不需要书写太多类型标注。大多数时候，用 TypeScript 书写的组合式 API 代码和用 JavaScript 写都差不太多！这也让许多纯 JavaScript 用户也能从 IDE 中享受到部分类型推导功能。
-- **更小的生产包体积**：搭配 \<script setup> 使用组合式 API 比等价情况下的选项式 API 更高效，对代码压缩也更友好。这是由于 \<script setup> 形式书写的组件模板被编译为了一个内联函数，和 \<script setup> 中的代码位于同一作用域。不像选项式 API 需要依赖 this 上下文对象访问属性，被编译的模板可以直接访问 \<script setup> 中定义的变量，无需一个代码实例从中代理。这对代码压缩更友好，因为本地变量的名字可以被压缩，但对象的属性名则不能。
+1. 一个 ref 创建的响应式对象，可以响应式地替换整个原始对象
+2. ref 被传递给函数或是从一般对象上被解构时，不会丢失响应性
+
+## ref 解包
+1. 当 ref 在模板中作为顶层属性被访问时，它们会被自动“解包”，所以不需要使用 .value。请注意，仅当 ref 是模板渲染上下文的顶层属性时才适用自动“解包”。例如， foo 是顶层属性，但 object.foo 不是。
+2. 如果一个 ref 是文本插值（即一个 {{ }} 符号）计算的最终值，它也将被解包。
+3. 当一个 ref 被嵌套在一个响应式对象中，作为属性被访问或更改时，它会自动解包，因此会表现得和一般的属性一样。如果将一个新的 ref 赋值给一个关联了已有 ref 的属性，那么它会替换掉旧的 ref
+4. 只有当嵌套在一个深层响应式对象内时，才会发生 ref 解包。当其作为浅层响应式对象的属性被访问时不会解包。
+5. 跟响应式对象不同，当 ref 作为响应式数组或像 Map 这种原生集合类型的元素被访问时，不会进行解包。
+
+**[为ref标注类型](https://cn.vuejs.org/guide/typescript/composition-api.html#typing-ref)**
+
+# 数据传递
+
+- 父传子：利用defineProps宏函数来进行声明，接收父组件传递过来的参数，它的参数和 Vue2 props 选项的值是一样的。
+- 子传父：利用defineProps宏函数来进行声明，接收父组件传递过来的参数，它的参数和 Vue2 props 选项的值是一样的。
+

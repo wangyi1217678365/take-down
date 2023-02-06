@@ -1,4 +1,25 @@
-# webpack
+# [webpack](https://juejin.cn/post/7170852747749621791)
+> webpack 本质上是一个函数，它接受一个配置信息作为参数，执行后返回一个 compiler 对象，调用 compiler 对象中的 run 方法就会启动编译。run 方法接受一个回调，可以用来查看编译过程中的错误信息或编译信息。
+
+## loader
+> 由于浏览器并不认识除 html、js、css 以外的文件格式，所以我们还需要对源文件进行转换 —— Loader 系统。Loader 系统 本质上就是接收资源文件，并对其进行转换，最终输出转换后的文件：
+![loader](https://cdn.jsdelivr.net/gh/wangyi1217678365/yi-image-host/d136fc6ee2134316ba2ed5d80e19b243~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp)
+
+## plugin
+> 本质上就是一种事件流的机制，到了固定的时间节点就广播特定的事件，用户可以在事件内执行特定的逻辑，类似于生命周期：
+![plugin](https://cdn.jsdelivr.net/gh/wangyi1217678365/yi-image-host/19369943abc04a71b970e70b9cbfb434~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.awebp)
+
+## 打包过程
+1. 读取配置参数
+2. 用配置参数对象初始化 Compiler 对象
+3. 挂载配置文件中的插件
+4. 执行 Compiler 对象的 run 方法开始执行编译
+5. 根据配置文件中的 entry 配置项找到所有的入口
+6. 从入口文件出发，调用配置的 loader 规则，对各模块进行编译
+7. 找出此模块所依赖的模块，再对依赖模块进行编译
+8. 等所有模块都编译完成后，根据模块之间的依赖关系，组装代码块 chunk
+9. 把各个代码块 chunk 转换成一个一个文件加入到输出列表
+10. 确定好输出内容之后，根据配置的输出路径和文件名，将文件内容写入到文件系统
 
 
 
