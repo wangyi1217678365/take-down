@@ -180,3 +180,26 @@
   useCssModule('classes')
 ```
 
+```
+  <parent class="parent" data-v="123">
+    <child class="child" data-v="123" data-v="456">
+      <div data-v="456">
+        <p data-v="456"></p>
+      </div>
+    </child>
+  </parent>
+  .parent .child div p {
+
+  }
+  .parent .child div p[data-v="123"] {
+    
+  }
+
+  .parent .child ::v-deep div   p {
+    
+  }
+
+  .parent .child[data-v="123"] div p {
+    
+  }
+```
