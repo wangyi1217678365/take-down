@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>test</title>
+</head>
+
+<body>
+  <div id="root">
+    <ul id="ul">
+      <li></li>
+      <li></li>
+      <li id="li3"></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+    <button id="click">click</button>
+  </div>
+  <script>
+    const root = document.querySelector('#root')
+    let ul = document.querySelector('#ul')
+    let li3 = document.querySelector('#li3')
+    const click = document.querySelector('#click')
+    
+    // 由于ul变量存在，整个ul及其子元素都不能GC
+    root.removeChild(ul)
+    
+    // 虽置空了ul变量，但由于li3变量引用ul的子节点，所以ul元素依然不能被GC
+    // ul = null
+
+    // 已无变量引用，此时可以GC
+    // li3 = null
+    click.addEventListener("click", function () {
+      ul = null
+      li3 = null
+      // console.log(ul)
+      // console.log(li3)
+    });
+
+  </script>
+</body>
+
+</html>

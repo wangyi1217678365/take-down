@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>test</title>
+</head>
+
+<body>
+  <div id="root">
+    <div id="Node"></div>
+    <button id="clickNode">click</button>
+    <button id="unbundleNode">解绑</button>
+    <button onclick="() => arr = null">赋值为null</button>
+  </div>
+  <script>
+    let count = 0
+    const node = document.getElementById('Node')
+    const clickNode = document.getElementById('clickNode')
+    const unbundleNode = document.getElementById('unbundleNode')
+    let arr = []
+    function handlerFun () {
+      const test = new Array(10000).fill('isboyjc')
+      node.innerHTML = count += 1
+      arr.push(test)
+    }
+    clickNode.addEventListener('click', handlerFun)
+    
+    unbundleNode.addEventListener('click', () => {
+      clickNode.removeEventListener('click', handlerFun)
+      arr = null
+    })
+
+  </script>
+</body>
+
+</html>

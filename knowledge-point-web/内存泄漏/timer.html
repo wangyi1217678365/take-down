@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>test</title>
+</head>
+
+<body>
+  <div id="root">
+    <div id="Node"></div>
+    <button id="start">start</button>
+    <button id="clear">clear</button>
+  </div>
+  <script>
+    const root = document.querySelector('#root')
+    let intervalnum = null
+    let count = 0
+    function fun () {
+      const arr = []
+      const node = document.getElementById('Node')
+      function test () {
+        intervalnum = setInterval(() => {
+          const someResource = new Date().valueOf()
+          const test = new Array(100000).fill('isboyjc')
+          node.innerHTML = count += 1
+          arr.push(test)
+        }, 1000)
+      }
+      test()
+    }
+    start.addEventListener("click", function () {
+      fun()
+    })
+    clear.addEventListener("click", function () {
+      clearInterval(intervalnum)
+    });
+  </script>
+</body>
+
+</html>

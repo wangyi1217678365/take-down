@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>test</title>
+</head>
+
+<body>
+  <script>
+    let obj = {id: 1}
+    let set = new Set([obj])
+    let map = new Map([[obj, 'hahaha']])
+
+    // 重写obj
+    obj = null 
+
+    setInterval(() => {
+      console.log(obj)
+      console.log(set)
+      console.log(map)
+    }, 2000)
+    
+  </script>
+</body>
+
+</html>

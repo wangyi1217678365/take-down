@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <button id="btn" onClick="log()">点我</button>
+    <script>
+      function log() {
+        const arr = []
+        const MB = 1024 * 1024
+        for (let i = 0; i < 5; i++) {
+          arr.push('g'.repeat(50 * MB))
+        }
+        // console.log(arr)
+        console.log(1)
+      }
+    </script>
+</body>
+</html>

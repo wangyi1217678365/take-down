@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>test</title>
+</head>
+
+<body>
+  <script>
+    function fn() {
+      // 没有声明从而制造了隐式全局变量test1
+      test1 = new Array(10000).fill('isboyjc1')
+      
+      // 函数内部this指向window，制造了隐式全局变量test2
+      this.test2 = new Array(10000).fill('isboyjc2')
+    }
+    fn()
+    console.log(test1, test2)
+  </script>
+</body>
+
+</html>
