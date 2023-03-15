@@ -13,7 +13,6 @@
     <button id="clear">clear</button>
   </div>
   <script>
-    const root = document.querySelector('#root')
     let intervalnum = null
     let count = 0
     function fun () {
@@ -21,7 +20,6 @@
       const node = document.getElementById('Node')
       function test () {
         intervalnum = setInterval(() => {
-          const someResource = new Date().valueOf()
           const test = new Array(100000).fill('isboyjc')
           node.innerHTML = count += 1
           arr.push(test)
