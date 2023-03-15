@@ -1,5 +1,5 @@
 # [vue3](https://cn.vuejs.org/api/composition-api-lifecycle.html#onmounted)
-![vue3生命周期](https://cdn.jsdelivr.net/gh/wangyi1217678365/yi-image-host/lifecycle.16e4c08e.png)
+![vue3生命周期](https://jsdelivr.codeqihan.com/gh/wangyi1217678365/yi-image-host/lifecycle.16e4c08e.png)
 1. **[onBeforeMount](https://cn.vuejs.org/api/composition-api-lifecycle.html#onbeforemount)**：注册一个回调函数，在组件被挂载之前被调用。
    - 当这个钩子被调用时，组件已经完成了其响应式状态的设置，但还没有创建 DOM 节点。它即将首次执行 DOM 渲染过程。
    - 这个钩子在服务器端渲染期间不会被调用。

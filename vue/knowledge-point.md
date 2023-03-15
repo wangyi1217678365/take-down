@@ -84,7 +84,7 @@
 ---
 # [指令](https://cn.vuejs.org/guide/essentials/template-syntax.html#directives)
 > 指令由 v- 作为前缀，表明它们是一些由 Vue 提供的特殊 attribute，它们将为渲染的 DOM 应用特殊的响应式行为。一个指令的任务是在其表达式的值变化时响应式地更新 DOM。Vue 提供了许多内置指令，v-model、v-html、v-bind、v-on、v-for、v-if、v-show等。
-![指令详解](https://cdn.jsdelivr.net/gh/wangyi1217678365/yi-image-host/directive.69c37117.png)
+![指令详解](https://jsdelivr.codeqihan.com/gh/wangyi1217678365/yi-image-host/directive.69c37117.png)
 - 在网站上动态渲染任意 HTML 是非常危险的，因为这非常容易造成 XSS 漏洞。请仅在内容安全可信时再使用 v-html，并且永远不要使用用户提供的 HTML 内容。
 - 如果绑定的值是 null、undefined 或者 false，那么该 attribute 将会从渲染的元素上移除。
 - 可以通过不带参数的 v-bind，将一个对象绑定到元素上。可以利用这点完成父组件传入对象，子组件props访问解构的对象。

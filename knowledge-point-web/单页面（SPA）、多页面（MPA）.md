@@ -30,4 +30,4 @@
 - 用户体验不佳：如果网络慢,页面很容易半天加载不出来,用户体验非常不好
 
 # SPA vs MPA
-![SPA和MPA对比](https://cdn.jsdelivr.net/gh/wangyi1217678365/yi-image-host/SPA和MPA对比.awebp)
+![SPA和MPA对比](https://jsdelivr.codeqihan.com/gh/wangyi1217678365/yi-image-host/SPA和MPA对比.awebp)

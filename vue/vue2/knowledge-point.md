@@ -1,5 +1,5 @@
-# [vue2](https://cdn.jsdelivr.net/gh/wangyi1217678365/yi-image-host/lifecycle.png)
-![vue2生命周期](https://cdn.jsdelivr.net/gh/wangyi1217678365/yi-image-host/16ca74f183827f46~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp)
+# [vue2](https://jsdelivr.codeqihan.com/gh/wangyi1217678365/yi-image-host/lifecycle.png)
+![vue2生命周期](https://jsdelivr.codeqihan.com/gh/wangyi1217678365/yi-image-host/16ca74f183827f46~tplv-t2oaga2asx-zoom-in-crop-mark:3024:0:0:0.awebp)
 1. **[beforeCreate](https://v2.cn.vuejs.org/v2/api/#beforeCreate)**：在实例初始化之后，进行数据侦听和事件/侦听器的配置之前同步调用。在这个阶段data选项跟methods选项还没有初始化完毕，所以data数据不是响应式的。
 2. **[created](https://v2.cn.vuejs.org/v2/api/#created)**：在实例创建完成后被立即同步调用。在这一步中，实例已完成对选项的处理，意味着以下内容已被配置完毕：数据侦听、计算属性、方法、事件/侦听器的回调函数。然而，挂载阶段还没开始，且 $el property 目前尚不可用。
 3. **[beforeMount](https://v2.cn.vuejs.org/v2/api/#beforeMount)**：在挂载开始之前被调用：相关的 render 函数首次被调用。这时还无法获取到$el property。注意该钩子在服务器端渲染期间不被调用。
