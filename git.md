@@ -101,3 +101,11 @@
   git config core.ignorecase true // 忽略
   git config core.ignorecase false // 不忽略
 ```
+
+## [行尾序列设置](https://juejin.cn/post/7065491626826661896)
+CRLF：回车换行
+CR：即平常说的\r，回车
+LF：即\n，换行
+```
+  git config --global core.autocrlf  [true | input | false]  // 自动更换CRLF | 自动把/r/n替换成/n | 不对文件内容行尾CRLF做处理
+```
