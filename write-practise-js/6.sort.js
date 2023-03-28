@@ -15,16 +15,15 @@ function bubbleSort (arr) {
 }
 bubbleSort(arr)
 
-// 选择排序：双层循环比较排序，外循环每一次循环指定最小值的下标，内循环的每一次循环比较最小值
+// 选择排序：双层循环比较排序，外循环每一次循环指定最小值的下标，内循环的每一次循环比较最小值的下标进行换位
 function selectSort (arr) {
   const len = arr.length
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < len - 1; i++) {
     let minIndex = i
-    for (let j = 1; j < len; j++) {
+    for (let j = i + 1; j < len; j++) {
       if (arr[j] < arr[minIndex]) minIndex = j
-      if (minIndex !== i) [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]]
     }
-    if (!flag) return
+    if (minIndex !== i) [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]]
   }
 }
-bubbleSort(arr)
+selectSort(arr)
