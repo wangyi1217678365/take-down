@@ -16,5 +16,5 @@ const myNew = (fun, ...args) => {
   if (typeof fun !== 'function') return 
   const obj = Object.create(fun.prototype)
   const result = fun.apply(obj, args)
-  return (result && typeof (result === 'object' || typeof result === 'function')) || obj 
+  return (result && (typeof result === 'object' || typeof result === 'function')) || obj 
 }
